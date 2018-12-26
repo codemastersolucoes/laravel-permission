@@ -1,6 +1,7 @@
 # Associate users with permissions and roles
 
-
+####This package has been forked from [spatie/laravel-permission](https://github.com/spatie/laravel-permission) and modified by [codemastersolucoes/laravel-permission](https://github.com/codemastersolucoes/laravel-permission)
+ 
 ### Sponsor
 
 <table>
@@ -68,7 +69,7 @@ This package can be used in Laravel 5.4 or higher. If you are using an older ver
 You can install the package via composer:
 
 ``` bash
-composer require spatie/laravel-permission
+composer require codemastersolucoes/laravel-permission
 ```
 
 In Laravel 5.5 the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
@@ -76,14 +77,14 @@ In Laravel 5.5 the service provider will automatically get registered. In older 
 ```php
 'providers' => [
     // ...
-    Spatie\Permission\PermissionServiceProvider::class,
+    CodeMaster\Permission\PermissionServiceProvider::class,
 ];
 ```
 
 You can publish [the migration](https://github.com/spatie/laravel-permission/blob/master/database/migrations/create_permission_tables.php.stub) with:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="CodeMaster\Permission\PermissionServiceProvider" --tag="migrations"
 ```
 
 If you're using UUIDs or GUIDs for your `User` models you can update the `create_permission_tables.php` migration and replace `$table->unsignedBigInteger($columnNames['model_morph_key'])` with `$table->uuid($columnNames['model_morph_key'])`.
@@ -98,7 +99,7 @@ php artisan migrate
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="config"
+php artisan vendor:publish --provider="CodeMaster\Permission\PermissionServiceProvider" --tag="config"
 ```
 
 When published, [the `config/permission.php` config file](https://github.com/spatie/laravel-permission/blob/master/config/permission.php) contains:
@@ -114,10 +115,10 @@ return [
          * is often just the "Permission" model but you may use whatever you like.
          *
          * The model you want to use as a Permission model needs to implement the
-         * `Spatie\Permission\Contracts\Permission` contract.
+         * `CodeMaster\Permission\Contracts\Permission` contract.
          */
 
-        'permission' => Spatie\Permission\Models\Permission::class,
+        'permission' => CodeMaster\Permission\Models\Permission::class,
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -125,10 +126,10 @@ return [
          * is often just the "Role" model but you may use whatever you like.
          *
          * The model you want to use as a Role model needs to implement the
-         * `Spatie\Permission\Contracts\Role` contract.
+         * `CodeMaster\Permission\Contracts\Role` contract.
          */
 
-        'role' => Spatie\Permission\Models\Role::class,
+        'role' => CodeMaster\Permission\Models\Role::class,
 
     ],
 
@@ -208,7 +209,7 @@ return [
          * The key to use when tagging and prefixing entries in the cache.
          */
 
-        'key' => 'spatie.permission.cache',
+        'key' => 'cms.permission.cache',
 
         /*
          * When checking for a permission against a model by passing a Permission
@@ -236,15 +237,15 @@ return [
 You can install the package via Composer:
 
 ``` bash
-composer require spatie/laravel-permission
+composer require codemastersolucoes/laravel-permission
 ```
 
 Copy the required files:
 
 ```bash
 mkdir -p config
-cp vendor/spatie/laravel-permission/config/permission.php config/permission.php
-cp vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub database/migrations/2018_01_01_000000_create_permission_tables.php
+cp vendor/codemastersolucoes/laravel-permission/config/permission.php config/permission.php
+cp vendor/codemastersolucoes/laravel-permission/database/migrations/create_permission_tables.php.stub database/migrations/2018_01_01_000000_create_permission_tables.php
 ```
 
 You will also need to create another configuration file at `config/auth.php`. Get it on the Laravel repository or just run the following command:
@@ -258,8 +259,8 @@ Then, in `bootstrap/app.php`, register the middlewares:
 ```php
 $app->routeMiddleware([
     'auth'       => App\Http\Middleware\Authenticate::class,
-    'permission' => Spatie\Permission\Middlewares\PermissionMiddleware::class,
-    'role'       => Spatie\Permission\Middlewares\RoleMiddleware::class,
+    'permission' => CodeMaster\Permission\Middlewares\PermissionMiddleware::class,
+    'role'       => CodeMaster\Permission\Middlewares\RoleMiddleware::class,
 ]);
 ```
 
@@ -268,7 +269,7 @@ As well as the config file, service provider, and cache alias:
 ```php
 $app->configure('permission');
 $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
-$app->register(Spatie\Permission\PermissionServiceProvider::class);
+$app->register(CodeMaster\Permission\PermissionServiceProvider::class);
 ```
 
 Now, run your migrations:
@@ -279,11 +280,11 @@ php artisan migrate
 
 ## Usage
 
-First, add the `Spatie\Permission\Traits\HasRoles` trait to your `User` model(s):
+First, add the `CodeMaster\Permission\Traits\HasRoles` trait to your `User` model(s):
 
 ```php
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
+use CodeMaster\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -297,7 +298,7 @@ class User extends Authenticatable
 >
 >```php
 >use Illuminate\Database\Eloquent\Model;
->use Spatie\Permission\Traits\HasRoles;
+>use CodeMaster\Permission\Traits\HasRoles;
 >
 >class Page extends Model
 >{
@@ -313,8 +314,8 @@ This package allows for users to be associated with permissions and roles. Every
 A `Role` and a `Permission` are regular Eloquent models. They require a `name` and can be created like this:
 
 ```php
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use CodeMaster\Permission\Models\Role;
+use CodeMaster\Permission\Models\Permission;
 
 $role = Role::create(['name' => 'writer']);
 $permission = Permission::create(['name' => 'edit articles']);
@@ -365,7 +366,7 @@ The `HasRoles` trait also adds a `role` scope to your models to scope the query 
 $users = User::role('writer')->get(); // Returns only users with the role 'writer'
 ```
 
-The `role` scope can accept a string, a `\Spatie\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
+The `role` scope can accept a string, a `\CodeMaster\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
 
 The same trait also adds a scope to only get users that have a certain permission.
 
@@ -373,7 +374,7 @@ The same trait also adds a scope to only get users that have a certain permissio
 $users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles' (inherited or directly)
 ```
 
-The scope can accept a string, a `\Spatie\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
+The scope can accept a string, a `\CodeMaster\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
 
 ### Using "direct" permissions (see below to use both roles and permissions)
 
@@ -485,7 +486,7 @@ $user->hasAllRoles(Role::all());
 ```
 
 The `assignRole`, `hasRole`, `hasAnyRole`, `hasAllRoles`  and `removeRole` functions can accept a
- string, a `\Spatie\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
+ string, a `\CodeMaster\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
 
 A permission can be given to a role:
 
@@ -506,7 +507,7 @@ $role->revokePermissionTo('edit articles');
 ```
 
 The `givePermissionTo` and `revokePermissionTo` functions can accept a
-string or a `Spatie\Permission\Models\Permission` object.
+string or a `CodeMaster\Permission\Models\Permission` object.
 
 
 Permissions are inherited from roles automatically. 
@@ -542,7 +543,7 @@ $user->getPermissionsViaRoles();
 $user->getAllPermissions();
 ```
 
-All these responses are collections of `Spatie\Permission\Models\Permission` objects.
+All these responses are collections of `CodeMaster\Permission\Models\Permission` objects.
 
 If we follow the previous example, the first response will be a collection with the `delete article` permission and 
 the second will be a collection with the `edit article` permission and the third will contain both.
@@ -696,9 +697,9 @@ This package comes with `RoleMiddleware`, `PermissionMiddleware` and `RoleOrPerm
 ```php
 protected $routeMiddleware = [
     // ...
-    'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-    'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-    'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+    'role' => \CodeMaster\Permission\Middlewares\RoleMiddleware::class,
+    'permission' => \CodeMaster\Permission\Middlewares\PermissionMiddleware::class,
+    'role_or_permission' => \CodeMaster\Permission\Middlewares\RoleOrPermissionMiddleware::class,
 ];
 ```
 
@@ -764,7 +765,7 @@ If you want to override the default `403` response, you can catch the `Unauthori
 ```php
 public function render($request, Exception $exception)
 {
-    if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+    if ($exception instanceof \CodeMaster\Permission\Exceptions\UnauthorizedException) {
         // Code here ...
     }
 
@@ -812,7 +813,7 @@ In your application's tests, if you are not seeding roles and permissions as par
         parent::setUp();
 
         // now re-register all the roles and permissions
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+        $this->app->make(\CodeMaster\Permission\PermissionRegistrar::class)->registerPermissions();
     }
 ```
 
@@ -822,15 +823,15 @@ You may discover that it is best to flush this package's cache before seeding, t
 
 ```php
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use CodeMaster\Permission\Models\Role;
+use CodeMaster\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
     public function run()
     {
         // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[\CodeMaster\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
         Permission::create(['name' => 'edit articles']);
@@ -858,19 +859,19 @@ class RolesAndPermissionsSeeder extends Seeder
 
 If you need to EXTEND the existing `Role` or `Permission` models note that:
 
-- Your `Role` model needs to extend the `Spatie\Permission\Models\Role` model
-- Your `Permission` model needs to extend the `Spatie\Permission\Models\Permission` model
+- Your `Role` model needs to extend the `CodeMaster\Permission\Models\Role` model
+- Your `Permission` model needs to extend the `CodeMaster\Permission\Models\Permission` model
 
 If you need to REPLACE the existing `Role` or `Permission` models you need to keep the
 following things in mind:
 
-- Your `Role` model needs to implement the `Spatie\Permission\Contracts\Role` contract
-- Your `Permission` model needs to implement the `Spatie\Permission\Contracts\Permission` contract
+- Your `Role` model needs to implement the `CodeMaster\Permission\Contracts\Role` contract
+- Your `Permission` model needs to implement the `CodeMaster\Permission\Contracts\Permission` contract
 
 In BOTH cases, whether extending or replacing, you will need to specify your new models in the configuration. To do this you must update the `models.role` and `models.permission` values in the configuration file after publishing the configuration with this command:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="config"
+php artisan vendor:publish --provider="CodeMaster\Permission\PermissionServiceProvider" --tag="config"
 ```
  
 
@@ -899,7 +900,7 @@ HOWEVER, if you manipulate permission/role data directly in the database instead
 ### Manual cache reset
 To manually reset the cache for this package, you can run the following in your app code:
 ```php
-$this->app->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+$this->app->make(\CodeMaster\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 ```
 
 Or you can use an Artisan command:
