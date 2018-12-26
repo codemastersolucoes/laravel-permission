@@ -1,5 +1,5 @@
 {
-    "name": "spatie/laravel-permission",
+    "name": "codemastersolucoes/laravel-permission",
     "description": "Permission handling for Laravel 5.4 and up",
     "keywords": [
         "spatie",
@@ -26,13 +26,14 @@
         "illuminate/database": "~5.4.0|~5.5.0|~5.6.0|~5.7.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "orchestra/testbench": "~3.4.2|~3.5.0|~3.6.0|~3.7.0",
         "phpunit/phpunit": "^5.7|6.2|^7.0",
         "predis/predis": "^1.1"
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Permission\\": "src"
+            "CodeMaster\\Permission\\": "src"
         },
         "files": [
             "src/helpers.php"
@@ -40,7 +41,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Permission\\Test\\": "tests"
+            "CodeMaster\\Permission\\Test\\": "tests"
         }
     },
     "scripts": {
@@ -52,7 +53,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Permission\\PermissionServiceProvider"
+                "CodeMaster\\Permission\\PermissionServiceProvider"
             ]
         }
     }

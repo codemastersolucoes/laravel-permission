@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Permission\Traits;
+namespace CodeMaster\Permission\Traits;
 
 use Illuminate\Support\Collection;
-use Spatie\Permission\Contracts\Role;
+use CodeMaster\Permission\Contracts\Role;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\Permission\PermissionRegistrar;
+use CodeMaster\Permission\PermissionRegistrar;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait HasRoles
@@ -14,10 +14,13 @@ trait HasRoles
 
     private $roleClass;
 
+    /**
+     *
+     */
     public static function bootHasRoles()
     {
         static::deleting(function ($model) {
-            if (method_exists($model, 'isForceDeleting') && ! $model->isForceDeleting()) {
+            if (method_exists($model, 'isForceDeleting') && !$model->isForceDeleting()) {
                 return;
             }
 
@@ -25,9 +28,12 @@ trait HasRoles
         });
     }
 
+    /**
+     * @return mixed
+     */
     public function getRoleClass()
     {
-        if (! isset($this->roleClass)) {
+        if (!isset($this->roleClass)) {
             $this->roleClass = app(PermissionRegistrar::class)->getRoleClass();
         }
 
@@ -52,7 +58,7 @@ trait HasRoles
      * Scope the model query to certain roles only.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     * @param string|array|\CodeMaster\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -62,7 +68,7 @@ trait HasRoles
             $roles = $roles->all();
         }
 
-        if (! is_array($roles)) {
+        if (!is_array($roles)) {
             $roles = [$roles];
         }
 
@@ -79,7 +85,7 @@ trait HasRoles
         return $query->whereHas('roles', function ($query) use ($roles) {
             $query->where(function ($query) use ($roles) {
                 foreach ($roles as $role) {
-                    $query->orWhere(config('permission.table_names.roles').'.id', $role->id);
+                    $query->orWhere(config('permission.table_names.roles') . '.id', $role->id);
                 }
             });
         });
@@ -88,7 +94,7 @@ trait HasRoles
     /**
      * Assign the given role to the model.
      *
-     * @param array|string|\Spatie\Permission\Contracts\Role ...$roles
+     * @param array|string|\CodeMaster\Permission\Contracts\Role ...$roles
      *
      * @return $this
      */
@@ -140,7 +146,7 @@ trait HasRoles
     /**
      * Revoke the given role from the model.
      *
-     * @param string|\Spatie\Permission\Contracts\Role $role
+     * @param string|\CodeMaster\Permission\Contracts\Role $role
      */
     public function removeRole($role)
     {
@@ -152,7 +158,7 @@ trait HasRoles
     /**
      * Remove all current roles and set the given ones.
      *
-     * @param array|\Spatie\Permission\Contracts\Role|string ...$roles
+     * @param array|\CodeMaster\Permission\Contracts\Role|string ...$roles
      *
      * @return $this
      */
@@ -166,7 +172,7 @@ trait HasRoles
     /**
      * Determine if the model has (one of) the given role(s).
      *
-     * @param string|int|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     * @param string|int|array|\CodeMaster\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
      *
      * @return bool
      */
@@ -204,7 +210,7 @@ trait HasRoles
     /**
      * Determine if the model has any of the given role(s).
      *
-     * @param string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     * @param string|array|\CodeMaster\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
      *
      * @return bool
      */
@@ -216,7 +222,7 @@ trait HasRoles
     /**
      * Determine if the model has all of the given role(s).
      *
-     * @param string|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     * @param string|\CodeMaster\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
      *
      * @return bool
      */
@@ -249,11 +255,18 @@ trait HasRoles
         return $this->permissions;
     }
 
+    /**
+     * @return Collection
+     */
     public function getRoleNames(): Collection
     {
         return $this->roles->pluck('name');
     }
 
+    /**
+     * @param $role
+     * @return Role
+     */
     protected function getStoredRole($role): Role
     {
         $roleClass = $this->getRoleClass();
@@ -269,6 +282,10 @@ trait HasRoles
         return $role;
     }
 
+    /**
+     * @param string $pipeString
+     * @return array|string
+     */
     protected function convertPipeToArray(string $pipeString)
     {
         $pipeString = trim($pipeString);
@@ -284,7 +301,7 @@ trait HasRoles
             return explode('|', $pipeString);
         }
 
-        if (! in_array($quoteCharacter, ["'", '"'])) {
+        if (!in_array($quoteCharacter, ["'", '"'])) {
             return explode('|', $pipeString);
         }
 

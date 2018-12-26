@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace CodeMaster\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
+use CodeMaster\Permission\Contracts\Permission as PermissionContract;
 
 class CreatePermission extends Command
 {
@@ -13,6 +13,9 @@ class CreatePermission extends Command
 
     protected $description = 'Create a permission';
 
+    /**
+     *
+     */
     public function handle()
     {
         $permissionClass = app(PermissionContract::class);

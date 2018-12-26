@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
-use Spatie\Permission\Models\Permission;
+use CodeMaster\Permission\Models\Permission;
 
 class MultipleGuardsTest extends TestCase
 {
@@ -23,6 +23,9 @@ class MultipleGuardsTest extends TestCase
         $this->assertTrue($this->testUser->hasPermissionTo('do_that', 'api'));
     }
 
+    /**
+     * @param $app
+     */
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);

@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace CodeMaster\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
+use CodeMaster\Permission\Contracts\Role as RoleContract;
+use CodeMaster\Permission\Contracts\Permission as PermissionContract;
 
 class CreateRole extends Command
 {
@@ -15,6 +15,9 @@ class CreateRole extends Command
 
     protected $description = 'Create a role';
 
+    /**
+     *
+     */
     public function handle()
     {
         $roleClass = app(RoleContract::class);
@@ -26,6 +29,9 @@ class CreateRole extends Command
         $this->info("Role `{$role->name}` created");
     }
 
+    /**
+     * @param null $string
+     */
     protected function makePermissions($string = null)
     {
         if (empty($string)) {

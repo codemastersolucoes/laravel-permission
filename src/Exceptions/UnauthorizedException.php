@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission\Exceptions;
+namespace CodeMaster\Permission\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -10,13 +10,17 @@ class UnauthorizedException extends HttpException
 
     private $requiredPermissions = [];
 
+    /**
+     * @param array $roles
+     * @return UnauthorizedException
+     */
     public static function forRoles(array $roles): self
     {
         $message = 'User does not have the right roles.';
 
         if (config('permission.display_permission_in_exception')) {
             $permStr = implode(', ', $roles);
-            $message = 'User does not have the right roles. Necessary roles are '.$permStr;
+            $message = 'User does not have the right roles. Necessary roles are ' . $permStr;
         }
 
         $exception = new static(403, $message, null, []);
@@ -25,13 +29,17 @@ class UnauthorizedException extends HttpException
         return $exception;
     }
 
+    /**
+     * @param array $permissions
+     * @return UnauthorizedException
+     */
     public static function forPermissions(array $permissions): self
     {
         $message = 'User does not have the right permissions.';
 
         if (config('permission.display_permission_in_exception')) {
             $permStr = implode(', ', $permissions);
-            $message = 'User does not have the right permissions. Necessary permissions are '.$permStr;
+            $message = 'User does not have the right permissions. Necessary permissions are ' . $permStr;
         }
 
         $exception = new static(403, $message, null, []);
@@ -40,13 +48,17 @@ class UnauthorizedException extends HttpException
         return $exception;
     }
 
+    /**
+     * @param array $rolesOrPermissions
+     * @return UnauthorizedException
+     */
     public static function forRolesOrPermissions(array $rolesOrPermissions): self
     {
         $message = 'User does not have any of the necessary access rights.';
 
         if (config('permission.display_permission_in_exception') && config('permission.display_role_in_exception')) {
             $permStr = implode(', ', $rolesOrPermissions);
-            $message = 'User does not have the right permissions. Necessary permissions are '.$permStr;
+            $message = 'User does not have the right permissions. Necessary permissions are ' . $permStr;
         }
 
         $exception = new static(403, $message, null, []);
@@ -55,16 +67,25 @@ class UnauthorizedException extends HttpException
         return $exception;
     }
 
+    /**
+     * @return UnauthorizedException
+     */
     public static function notLoggedIn(): self
     {
         return new static(403, 'User is not logged in.', null, []);
     }
 
+    /**
+     * @return array
+     */
     public function getRequiredRoles(): array
     {
         return $this->requiredRoles;
     }
 
+    /**
+     * @return array
+     */
     public function getRequiredPermissions(): array
     {
         return $this->requiredPermissions;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
-use Spatie\Permission\Contracts\Role;
-use Spatie\Permission\Contracts\Permission;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use CodeMaster\Permission\Contracts\Role;
+use CodeMaster\Permission\Contracts\Permission;
+use CodeMaster\Permission\Exceptions\GuardDoesNotMatch;
+use CodeMaster\Permission\Exceptions\PermissionDoesNotExist;
 
 class HasPermissionsTest extends TestCase
 {

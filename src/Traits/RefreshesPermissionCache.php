@@ -1,11 +1,14 @@
 <?php
 
-namespace Spatie\Permission\Traits;
+namespace CodeMaster\Permission\Traits;
 
-use Spatie\Permission\PermissionRegistrar;
+use CodeMaster\Permission\PermissionRegistrar;
 
 trait RefreshesPermissionCache
 {
+    /**
+     *
+     */
     public static function bootRefreshesPermissionCache()
     {
         static::saved(function () {

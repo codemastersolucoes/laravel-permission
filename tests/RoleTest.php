@@ -1,16 +1,19 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
-use Spatie\Permission\Contracts\Role;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
-use Spatie\Permission\Exceptions\RoleAlreadyExists;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use CodeMaster\Permission\Contracts\Role;
+use CodeMaster\Permission\Models\Permission;
+use CodeMaster\Permission\Exceptions\RoleDoesNotExist;
+use CodeMaster\Permission\Exceptions\GuardDoesNotMatch;
+use CodeMaster\Permission\Exceptions\RoleAlreadyExists;
+use CodeMaster\Permission\Exceptions\PermissionDoesNotExist;
 
 class RoleTest extends TestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();

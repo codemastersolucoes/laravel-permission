@@ -1,24 +1,27 @@
 <?php
 
-namespace Spatie\Permission\Traits;
+namespace CodeMaster\Permission\Traits;
 
-use Spatie\Permission\Guard;
+use CodeMaster\Permission\Guard;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Contracts\Permission;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
+use CodeMaster\Permission\PermissionRegistrar;
+use CodeMaster\Permission\Contracts\Permission;
+use CodeMaster\Permission\Exceptions\GuardDoesNotMatch;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use CodeMaster\Permission\Exceptions\PermissionDoesNotExist;
 
 trait HasPermissions
 {
     private $permissionClass;
 
+    /**
+     *
+     */
     public static function bootHasPermissions()
     {
         static::deleting(function ($model) {
-            if (method_exists($model, 'isForceDeleting') && ! $model->isForceDeleting()) {
+            if (method_exists($model, 'isForceDeleting') && !$model->isForceDeleting()) {
                 return;
             }
 
@@ -26,9 +29,12 @@ trait HasPermissions
         });
     }
 
+    /**
+     * @return mixed
+     */
     public function getPermissionClass()
     {
-        if (! isset($this->permissionClass)) {
+        if (!isset($this->permissionClass)) {
             $this->permissionClass = app(PermissionRegistrar::class)->getPermissionClass();
         }
 
@@ -53,7 +59,7 @@ trait HasPermissions
      * Scope the model query to certain permissions only.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|\CodeMaster\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -69,7 +75,7 @@ trait HasPermissions
             $query->whereHas('permissions', function ($query) use ($permissions) {
                 $query->where(function ($query) use ($permissions) {
                     foreach ($permissions as $permission) {
-                        $query->orWhere(config('permission.table_names.permissions').'.id', $permission->id);
+                        $query->orWhere(config('permission.table_names.permissions') . '.id', $permission->id);
                     }
                 });
             });
@@ -77,7 +83,7 @@ trait HasPermissions
                 $query->orWhereHas('roles', function ($query) use ($rolesWithPermissions) {
                     $query->where(function ($query) use ($rolesWithPermissions) {
                         foreach ($rolesWithPermissions as $role) {
-                            $query->orWhere(config('permission.table_names.roles').'.id', $role->id);
+                            $query->orWhere(config('permission.table_names.roles') . '.id', $role->id);
                         }
                     });
                 });
@@ -86,7 +92,7 @@ trait HasPermissions
     }
 
     /**
-     * @param string|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|\CodeMaster\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
      *
      * @return array
      */
@@ -110,7 +116,7 @@ trait HasPermissions
     /**
      * Determine if the model may perform the given permission.
      *
-     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param string|int|\CodeMaster\Permission\Contracts\Permission $permission
      * @param string|null $guardName
      *
      * @return bool
@@ -118,12 +124,12 @@ trait HasPermissions
      */
     public function hasPermissionTo($permission, $guardName = null): bool
     {
-        if (! is_string($permission) && ! is_int($permission) && ! $permission instanceof Permission) {
+        if (!is_string($permission) && !is_int($permission) && !$permission instanceof Permission) {
             throw new PermissionDoesNotExist;
         }
 
         $registrar = app(PermissionRegistrar::class);
-        if (! $registrar::$cacheIsTaggable) {
+        if (!$registrar::$cacheIsTaggable) {
             return $this->hasUncachedPermissionTo($permission, $guardName);
         }
 
@@ -164,7 +170,7 @@ trait HasPermissions
             );
         }
 
-        if (! $permission instanceof Permission) {
+        if (!$permission instanceof Permission) {
             throw new PermissionDoesNotExist;
         }
 
@@ -174,7 +180,7 @@ trait HasPermissions
     /**
      * An alias to hasPermissionTo(), but avoids throwing an exception.
      *
-     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param string|int|\CodeMaster\Permission\Contracts\Permission $permission
      * @param string|null $guardName
      *
      * @return bool
@@ -193,13 +199,13 @@ trait HasPermissions
     /**
      * Construct the key for the cache entry.
      *
-     * @param null|string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param null|string|int|\CodeMaster\Permission\Contracts\Permission $permission
      *
      * @return string
      */
     protected function getPermissionCacheKey($permission = null)
     {
-        $key = PermissionRegistrar::$cacheKey.'.'.$this->getClassCacheString();
+        $key = PermissionRegistrar::$cacheKey . '.' . $this->getClassCacheString();
 
         if ($permission !== null) {
             $key .= $this->getPermissionCacheString($permission);
@@ -211,7 +217,7 @@ trait HasPermissions
     /**
      * Construct the tags for the cache entry.
      *
-     * @param null|string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param null|string|int|\CodeMaster\Permission\Contracts\Permission $permission
      *
      * @return array
      */
@@ -236,13 +242,13 @@ trait HasPermissions
      */
     private function getClassCacheString()
     {
-        return str_replace('\\', '.', get_class($this)).'.'.$this->getKey();
+        return str_replace('\\', '.', get_class($this)) . '.' . $this->getKey();
     }
 
     /**
      * Get the key to cache the permission by.
      *
-     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param string|int|\CodeMaster\Permission\Contracts\Permission $permission
      *
      * @return mixed
      */
@@ -252,7 +258,7 @@ trait HasPermissions
             $permission = $permission[PermissionRegistrar::$cacheModelKey];
         }
 
-        return str_replace('\\', '.', Permission::class).'.'.$permission;
+        return str_replace('\\', '.', Permission::class) . '.' . $permission;
     }
 
     /**
@@ -293,7 +299,7 @@ trait HasPermissions
         }
 
         foreach ($permissions as $permission) {
-            if (! $this->hasPermissionTo($permission)) {
+            if (!$this->hasPermissionTo($permission)) {
                 return false;
             }
         }
@@ -304,7 +310,7 @@ trait HasPermissions
     /**
      * Determine if the model has, via roles, the given permission.
      *
-     * @param \Spatie\Permission\Contracts\Permission $permission
+     * @param \CodeMaster\Permission\Contracts\Permission $permission
      *
      * @return bool
      */
@@ -316,7 +322,7 @@ trait HasPermissions
     /**
      * Determine if the model has the given permission.
      *
-     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param string|int|\CodeMaster\Permission\Contracts\Permission $permission
      *
      * @return bool
      */
@@ -326,19 +332,19 @@ trait HasPermissions
 
         if (is_string($permission)) {
             $permission = $permissionClass->findByName($permission, $this->getDefaultGuardName());
-            if (! $permission) {
+            if (!$permission) {
                 return false;
             }
         }
 
         if (is_int($permission)) {
             $permission = $permissionClass->findById($permission, $this->getDefaultGuardName());
-            if (! $permission) {
+            if (!$permission) {
                 return false;
             }
         }
 
-        if (! $permission instanceof Permission) {
+        if (!$permission instanceof Permission) {
             return false;
         }
 
@@ -390,7 +396,7 @@ trait HasPermissions
     /**
      * Grant the given permission(s) to a role.
      *
-     * @param string|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|\CodeMaster\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
      *
      * @return $this
      */
@@ -438,7 +444,7 @@ trait HasPermissions
     /**
      * Remove all current permissions and set the given ones.
      *
-     * @param string|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|\CodeMaster\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
      *
      * @return $this
      */
@@ -452,7 +458,7 @@ trait HasPermissions
     /**
      * Revoke the given permission.
      *
-     * @param \Spatie\Permission\Contracts\Permission|\Spatie\Permission\Contracts\Permission[]|string|string[] $permission
+     * @param \CodeMaster\Permission\Contracts\Permission|\CodeMaster\Permission\Contracts\Permission[]|string|string[] $permission
      *
      * @return $this
      */
@@ -468,9 +474,9 @@ trait HasPermissions
     }
 
     /**
-     * @param string|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|\CodeMaster\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
      *
-     * @return \Spatie\Permission\Contracts\Permission|\Spatie\Permission\Contracts\Permission[]|\Illuminate\Support\Collection
+     * @return \CodeMaster\Permission\Contracts\Permission|\CodeMaster\Permission\Contracts\Permission[]|\Illuminate\Support\Collection
      */
     protected function getStoredPermission($permissions)
     {
@@ -495,22 +501,28 @@ trait HasPermissions
     }
 
     /**
-     * @param \Spatie\Permission\Contracts\Permission|\Spatie\Permission\Contracts\Role $roleOrPermission
+     * @param \CodeMaster\Permission\Contracts\Permission|\CodeMaster\Permission\Contracts\Role $roleOrPermission
      *
-     * @throws \Spatie\Permission\Exceptions\GuardDoesNotMatch
+     * @throws \CodeMaster\Permission\Exceptions\GuardDoesNotMatch
      */
     protected function ensureModelSharesGuard($roleOrPermission)
     {
-        if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
+        if (!$this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             throw GuardDoesNotMatch::create($roleOrPermission->guard_name, $this->getGuardNames());
         }
     }
 
+    /**
+     * @return Collection
+     */
     protected function getGuardNames(): Collection
     {
         return Guard::getNames($this);
     }
 
+    /**
+     * @return string
+     */
     protected function getDefaultGuardName(): string
     {
         return Guard::getDefaultName($this);

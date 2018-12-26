@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\Permission;
+namespace CodeMaster\Permission;
 
 use Illuminate\Cache\CacheManager;
 use Illuminate\Support\Collection;
-use Spatie\Permission\Contracts\Role;
+use CodeMaster\Permission\Contracts\Role;
 use Illuminate\Contracts\Auth\Access\Gate;
-use Spatie\Permission\Contracts\Permission;
+use CodeMaster\Permission\Contracts\Permission;
 use Illuminate\Contracts\Auth\Access\Authorizable;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use CodeMaster\Permission\Exceptions\PermissionDoesNotExist;
 
 class PermissionRegistrar
 {
@@ -55,6 +55,9 @@ class PermissionRegistrar
         $this->initializeCache();
     }
 
+    /**
+     *
+     */
     protected function initializeCache()
     {
         self::$cacheExpirationTime = config('permission.cache.expiration_time', config('permission.cache_expiration_time'));
@@ -68,6 +71,9 @@ class PermissionRegistrar
         $this->cache = self::$cacheIsTaggable ? $cache->tags(self::$cacheKey) : $cache;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Cache\Repository
+     */
     protected function getCacheStoreFromConfig(): \Illuminate\Contracts\Cache\Repository
     {
         // the 'default' fallback here is from the permission.php config file, where 'default' means to use config(cache.default)
@@ -79,7 +85,7 @@ class PermissionRegistrar
         }
 
         // if an undefined cache store is specified, fallback to 'array' which is Laravel's closest equiv to 'none'
-        if (! \array_key_exists($cacheDriver, config('cache.stores'))) {
+        if (!\array_key_exists($cacheDriver, config('cache.stores'))) {
             $cacheDriver = 'array';
         }
 
@@ -132,7 +138,7 @@ class PermissionRegistrar
                     ->get();
             });
 
-        if (! self::$cacheIsTaggable) {
+        if (!self::$cacheIsTaggable) {
             foreach ($params as $attr => $value) {
                 $permissions = $permissions->where($attr, $value);
             }
@@ -151,7 +157,7 @@ class PermissionRegistrar
     public function getKey(array $params): string
     {
         if ($params && self::$cacheIsTaggable) {
-            return self::$cacheKey.'.'.implode('.', array_values($params));
+            return self::$cacheKey . '.' . implode('.', array_values($params));
         }
 
         return self::$cacheKey;
@@ -160,7 +166,7 @@ class PermissionRegistrar
     /**
      * Get an instance of the permission class.
      *
-     * @return \Spatie\Permission\Contracts\Permission
+     * @return \CodeMaster\Permission\Contracts\Permission
      */
     public function getPermissionClass(): Permission
     {
@@ -170,7 +176,7 @@ class PermissionRegistrar
     /**
      * Get an instance of the role class.
      *
-     * @return \Spatie\Permission\Contracts\Role
+     * @return \CodeMaster\Permission\Contracts\Role
      */
     public function getRoleClass(): Role
     {

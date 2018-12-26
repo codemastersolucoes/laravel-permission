@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Middlewares\RoleMiddleware;
-use Spatie\Permission\Exceptions\UnauthorizedException;
-use Spatie\Permission\Middlewares\PermissionMiddleware;
-use Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;
+use CodeMaster\Permission\Middlewares\RoleMiddleware;
+use CodeMaster\Permission\Exceptions\UnauthorizedException;
+use CodeMaster\Permission\Middlewares\PermissionMiddleware;
+use CodeMaster\Permission\Middlewares\RoleOrPermissionMiddleware;
 
 class MiddlewareTest extends TestCase
 {
@@ -16,6 +16,9 @@ class MiddlewareTest extends TestCase
     protected $permissionMiddleware;
     protected $roleOrPermissionMiddleware;
 
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();
@@ -247,6 +250,11 @@ class MiddlewareTest extends TestCase
         $this->assertEquals(['some-permission'], $requiredPermissions);
     }
 
+    /**
+     * @param $middleware
+     * @param $parameter
+     * @return int
+     */
     protected function runMiddleware($middleware, $parameter)
     {
         try {

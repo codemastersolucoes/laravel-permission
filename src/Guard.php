@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Permission;
+namespace CodeMaster\Permission;
 
 use Illuminate\Support\Collection;
 
@@ -12,13 +12,13 @@ class Guard
      * @param $model
      * @return Collection
      */
-    public static function getNames($model) : Collection
+    public static function getNames($model): Collection
     {
         if (is_object($model)) {
             $guardName = $model->guard_name ?? null;
         }
 
-        if (! isset($guardName)) {
+        if (!isset($guardName)) {
             $class = is_object($model) ? get_class($model) : $model;
 
             $guardName = (new \ReflectionClass($class))->getDefaultProperties()['guard_name'] ?? null;
@@ -30,7 +30,7 @@ class Guard
 
         return collect(config('auth.guards'))
             ->map(function ($guard) {
-                if (! isset($guard['provider'])) {
+                if (!isset($guard['provider'])) {
                     return;
                 }
 
@@ -42,6 +42,10 @@ class Guard
             ->keys();
     }
 
+    /**
+     * @param $class
+     * @return string
+     */
     public static function getDefaultName($class): string
     {
         $default = config('auth.defaults.guard');

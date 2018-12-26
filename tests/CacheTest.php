@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Contracts\Role;
+use CodeMaster\Permission\Contracts\Role;
 use Illuminate\Support\Facades\Artisan;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Contracts\Permission;
+use CodeMaster\Permission\PermissionRegistrar;
+use CodeMaster\Permission\Contracts\Permission;
 
 class CacheTest extends TestCase
 {
@@ -187,7 +187,7 @@ class CacheTest extends TestCase
     public function it_can_reset_the_cache_with_artisan_command()
     {
         Artisan::call('permission:create-permission', ['name' => 'new-permission']);
-        $this->assertCount(1, \Spatie\Permission\Models\Permission::where('name', 'new-permission')->get());
+        $this->assertCount(1, \CodeMaster\Permission\Models\Permission::where('name', 'new-permission')->get());
 
         $this->resetQueryCount();
         // retrieve permissions, and assert that the cache had to be loaded
@@ -203,11 +203,17 @@ class CacheTest extends TestCase
         $this->assertQueryCount($this->cache_init_count + $this->cache_load_count + $this->cache_run_count);
     }
 
+    /**
+     * @param int $expected
+     */
     protected function assertQueryCount(int $expected)
     {
         $this->assertCount($expected, DB::getQueryLog());
     }
 
+    /**
+     *
+     */
     protected function resetQueryCount()
     {
         DB::flushQueryLog();

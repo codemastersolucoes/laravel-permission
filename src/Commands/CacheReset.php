@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Permission\Commands;
+namespace CodeMaster\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Spatie\Permission\PermissionRegistrar;
+use CodeMaster\Permission\PermissionRegistrar;
 
 class CacheReset extends Command
 {
@@ -11,6 +11,9 @@ class CacheReset extends Command
 
     protected $description = 'Reset the permission cache';
 
+    /**
+     *
+     */
     public function handle()
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();

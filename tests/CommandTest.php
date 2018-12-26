@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
-use Spatie\Permission\Models\Role;
+use CodeMaster\Permission\Models\Role;
 use Illuminate\Support\Facades\Artisan;
-use Spatie\Permission\Models\Permission;
+use CodeMaster\Permission\Models\Permission;
 
 class CommandTest extends TestCase
 {

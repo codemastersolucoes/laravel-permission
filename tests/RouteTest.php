@@ -1,16 +1,19 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
 use Illuminate\Http\Response;
 
 class RouteTest extends TestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();
 
-        if (! $this->isVersionAvailable()) {
+        if (!$this->isVersionAvailable()) {
             $this->markTestSkipped(
                 'This feature available for Laravel 5.5 and higher'
             );
@@ -23,8 +26,8 @@ class RouteTest extends TestCase
         $router = $this->getRouter();
 
         $router->get('role-test', $this->getRouteResponse())
-                ->name('role.test')
-                ->role('superadmin');
+            ->name('role.test')
+            ->role('superadmin');
 
         $this->assertEquals(['role:superadmin'], $this->getLastRouteMiddlewareFromRouter($router));
     }
@@ -35,8 +38,8 @@ class RouteTest extends TestCase
         $router = $this->getRouter();
 
         $router->get('permission-test', $this->getRouteResponse())
-                ->name('permission.test')
-                ->permission(['edit articles', 'save articles']);
+            ->name('permission.test')
+            ->permission(['edit articles', 'save articles']);
 
         $this->assertEquals(['permission:edit articles|save articles'], $this->getLastRouteMiddlewareFromRouter($router));
     }
@@ -47,9 +50,9 @@ class RouteTest extends TestCase
         $router = $this->getRouter();
 
         $router->get('role-permission-test', $this->getRouteResponse())
-                ->name('role-permission.test')
-                ->role('superadmin|admin')
-                ->permission('create user|edit user');
+            ->name('role-permission.test')
+            ->role('superadmin|admin')
+            ->permission('create user|edit user');
 
         $this->assertEquals(
             [
@@ -60,21 +63,34 @@ class RouteTest extends TestCase
         );
     }
 
+    /**
+     * @return bool
+     */
     protected function isVersionAvailable()
     {
         return app()->version() >= '5.5';
     }
 
+    /**
+     * @param $router
+     * @return mixed
+     */
     protected function getLastRouteMiddlewareFromRouter($router)
     {
         return last($router->getRoutes()->get())->middleware();
     }
 
+    /**
+     * @return \Illuminate\Foundation\Application|mixed
+     */
     protected function getRouter()
     {
         return app('router');
     }
 
+    /**
+     * @return \Closure
+     */
     protected function getRouteResponse()
     {
         return function () {

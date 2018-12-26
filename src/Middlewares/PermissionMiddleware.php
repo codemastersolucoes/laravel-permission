@@ -1,12 +1,18 @@
 <?php
 
-namespace Spatie\Permission\Middlewares;
+namespace CodeMaster\Permission\Middlewares;
 
 use Closure;
-use Spatie\Permission\Exceptions\UnauthorizedException;
+use CodeMaster\Permission\Exceptions\UnauthorizedException;
 
 class PermissionMiddleware
 {
+    /**
+     * @param $request
+     * @param Closure $next
+     * @param $permission
+     * @return mixed
+     */
     public function handle($request, Closure $next, $permission)
     {
         if (app('auth')->guest()) {

@@ -1,36 +1,39 @@
 <?php
 
-namespace Spatie\Permission\Test;
+namespace CodeMaster\Permission\Test;
 
 use Illuminate\Support\Facades\Cache;
-use Spatie\Permission\Contracts\Role;
+use CodeMaster\Permission\Contracts\Role;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Contracts\Permission;
+use CodeMaster\Permission\PermissionRegistrar;
+use CodeMaster\Permission\Contracts\Permission;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\Permission\PermissionServiceProvider;
+use CodeMaster\Permission\PermissionServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    /** @var \Spatie\Permission\Test\User */
+    /** @var \CodeMaster\Permission\Test\User */
     protected $testUser;
 
-    /** @var \Spatie\Permission\Test\Admin */
+    /** @var \CodeMaster\Permission\Test\Admin */
     protected $testAdmin;
 
-    /** @var \Spatie\Permission\Models\Role */
+    /** @var \CodeMaster\Permission\Models\Role */
     protected $testUserRole;
 
-    /** @var \Spatie\Permission\Models\Role */
+    /** @var \CodeMaster\Permission\Models\Role */
     protected $testAdminRole;
 
-    /** @var \Spatie\Permission\Models\Permission */
+    /** @var \CodeMaster\Permission\Models\Permission */
     protected $testUserPermission;
 
-    /** @var \Spatie\Permission\Models\Permission */
+    /** @var \CodeMaster\Permission\Models\Permission */
     protected $testAdminPermission;
 
+    /**
+     *
+     */
     public function setUp()
     {
         parent::setUp();
@@ -67,12 +70,12 @@ abstract class TestCase extends Orchestra
     {
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
-        $app['config']->set('view.paths', [__DIR__.'/resources/views']);
+        $app['config']->set('view.paths', [__DIR__ . '/resources/views']);
 
         // Set-up admin guard
         $app['config']->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
@@ -109,7 +112,7 @@ abstract class TestCase extends Orchestra
             $this->createCacheTable();
         }
 
-        include_once __DIR__.'/../database/migrations/create_permission_tables.php.stub';
+        include_once __DIR__ . '/../database/migrations/create_permission_tables.php.stub';
 
         (new \CreatePermissionTables())->up();
 
@@ -132,6 +135,9 @@ abstract class TestCase extends Orchestra
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
+    /**
+     *
+     */
     public function createCacheTable()
     {
         Schema::create('cache', function ($table) {

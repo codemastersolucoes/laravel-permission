@@ -1,13 +1,20 @@
 <?php
 
-namespace Spatie\Permission\Middlewares;
+namespace CodeMaster\Permission\Middlewares;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Exceptions\UnauthorizedException;
+use CodeMaster\Permission\Exceptions\UnauthorizedException;
 
 class RoleOrPermissionMiddleware
 {
+    /**
+     * @param $request
+     * @param Closure $next
+     * @param $roleOrPermission
+     * @return mixed
+     * @throws UnauthorizedException
+     */
     public function handle($request, Closure $next, $roleOrPermission)
     {
         if (Auth::guest()) {
@@ -18,7 +25,7 @@ class RoleOrPermissionMiddleware
             ? $roleOrPermission
             : explode('|', $roleOrPermission);
 
-        if (! Auth::user()->hasAnyRole($rolesOrPermissions) && ! Auth::user()->hasAnyPermission($rolesOrPermissions)) {
+        if (!Auth::user()->hasAnyRole($rolesOrPermissions) && !Auth::user()->hasAnyPermission($rolesOrPermissions)) {
             throw UnauthorizedException::forRolesOrPermissions($rolesOrPermissions);
         }
 

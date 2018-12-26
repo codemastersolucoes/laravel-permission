@@ -9,7 +9,7 @@ function getModelForGuard(string $guard)
 {
     return collect(config('auth.guards'))
         ->map(function ($guard) {
-            if (! isset($guard['provider'])) {
+            if (!isset($guard['provider'])) {
                 return;
             }
 
@@ -17,7 +17,10 @@ function getModelForGuard(string $guard)
         })->get($guard);
 }
 
-function isNotLumen() : bool
+/**
+ * @return bool
+ */
+function isNotLumen(): bool
 {
-    return ! preg_match('/lumen/i', app()->version());
+    return !preg_match('/lumen/i', app()->version());
 }
